@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>P2P Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
+</head>
+<body>
+  <h1>P2P Multiplayer</h1>
+  <p>Your ID: <span id="your-id">Loading...</span></p>
+  <input id="connect-to-id" placeholder="Enter peer ID to connect">
+  <button onclick="connect()">Connect</button>
+
+  <textarea id="chat" rows="10" cols="30" readonly></textarea><br>
+  <input id="msg" placeholder="Type message">
+  <button onclick="send()">Send</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
