@@ -5676,9 +5676,13 @@ document.getElementById('loadButton').addEventListener('click', openLoadMenu);
   
         };
         const MILES_PER_VOXEL = 3;
-const peer = new Peer();
+const peer = new Peer(undefined, {
+  host: 'peerjs.com',
+  port: 443,
+  secure: true
+});
+
   let conn = null;
-  const changedCells = [];
 
   peer.on('open', id => {
     document.getElementById('my-id').textContent = id;
@@ -5697,25 +5701,27 @@ const peer = new Peer();
 
   function setupConnection() {
     conn.on('data', data => {
-      if (data.changes) {
-        for (const { x, y, value } of data.changes) {
-          if (grid[y] && grid[y][x] !== undefined) {
-            grid[y][x] = value;
+      if (data.grid) {
+        // Update local grid with remote grid data
+        for (let y = 0; y < grid.length; y++) {
+          for (let x = 0; x < grid[0].length; x++) {
+            grid[y][x] = data.grid[y][x];
           }
         }
       }
     });
   }
 
-  function sendChanges() {
-    if (conn && conn.open && changedCells.length > 0) {
-      conn.send({ changes: changedCells });
-      changedCells.length = 0; // Clear after sending
+  function sendGrid() {
+    if (conn && conn.open) {
+      conn.send({ grid });
     }
   }
 
-  // Send diffs every 100ms
-  setInterval(sendChanges, 100);
+  // Call this every second to sync (optional: optimize to send changes only)
+  setInterval(() => {
+    sendGrid();
+  }, 1000);
 function milesToCols(miles) {
     return Math.floor(miles / MILES_PER_VOXEL);
 }
