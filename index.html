@@ -5676,11 +5676,7 @@ document.getElementById('loadButton').addEventListener('click', openLoadMenu);
   
         };
         const MILES_PER_VOXEL = 3;
-const peer = new Peer(undefined, {
-  host: 'peerjs.com',
-  port: 443,
-  secure: true
-});
+const peer = new Peer();
 
   let conn = null;
 
